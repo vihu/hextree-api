@@ -1,0 +1,30 @@
+[package]
+name = "hextree-api"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+hextree = { version = "0", features = [ "serde" ] }
+axum = "0"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+tokio-util = "0"
+tracing = "0"
+tracing-log = "0"
+tracing-subscriber = { version = "0", default-features=false, features = ["env-filter", "registry", "fmt"] }
+serde =  {version = "1", features=["derive"]}
+serde_json = { version = "1", features = [ "std"] }
+anyhow = "1"
+config = {version="0", default-features=false, features=["toml"]}
+clap = {version = "4", features = ["derive"]}
+tower = { version = "0.4", features = ["util"] }
+tower-http = { version = "0.4.0", features = ["fs", "trace", "cors"] }
+byteorder = "1"
+flate2 = "1"
+thiserror = "1"
+helium-proto = {git = "https://github.com/helium/proto", branch = "master", features = ["services"]}
+h3o = "0"
+
+[profile.release]
+debug = true

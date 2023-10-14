@@ -1,0 +1,7 @@
+log = "hextree_api=debug"
+host = "127.0.0.1"
+port = 3001
+region_dir = "/path/to/region/dir"
+
+[cache]
+expiration = 3600
