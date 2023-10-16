@@ -24,7 +24,8 @@ byteorder = "1"
 flate2 = "1"
 thiserror = "1"
 helium-proto = {git = "https://github.com/helium/proto", branch = "master", features = ["services"]}
-h3o = "0"
+h3o = { version = "0", features = [ "geo", "serde" ] }
+geo = "0"
 
 [profile.release]
 debug = true
