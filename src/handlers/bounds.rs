@@ -12,7 +12,7 @@ use h3o::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
-use std::{collections::HashMap, sync::Arc};
+use std::sync::Arc;
 
 type Resp = Json<Value>;
 
@@ -32,7 +32,7 @@ pub struct RequestQuery {
 
 pub async fn bounds(
     Query(query): Query<RequestQuery>,
-    State(_state): State<Arc<AppState>>,
+    State(state): State<Arc<AppState>>,
 ) -> Result<(StatusCode, Resp), AppError> {
     // top left coordinates
     let top_left = LatLng::new(query.top_left_lat, query.top_left_lon)?;
@@ -59,13 +59,10 @@ pub async fn bounds(
     let polygon = Polygon::from_degrees(bounding_box)?;
 
     // get cells from polygon
-    let cells: Vec<HashMap<String, String>> = polygon
+    let cells: Vec<Value> = polygon
         .to_cells(PolyfillConfig::new(Resolution::try_from(query.res)?))
-        .map(|cell| {
-            let mut map = HashMap::new();
-            map.insert("hex_id".to_string(), cell.to_string());
-            map
-        })
+        .filter_map(|cell| state.region_map.get(cell).map(|pop| (cell, pop)))
+        .map(|(cell, pop)| json!({"hex_id": cell.to_string(), "population": pop}))
         .collect();
 
     Ok((StatusCode::OK, Json(json!(cells))))

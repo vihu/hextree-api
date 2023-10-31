@@ -1,21 +1,22 @@
 use crate::{
     handlers::{bounds, health},
-    lookup::RegionMap,
+    lookup::PopMap,
     settings::Settings,
 };
 use anyhow::{Error, Result};
 use axum::{routing::get, Router};
-use std::sync::Arc;
+use std::{fs::File, sync::Arc};
 use tower_http::cors::CorsLayer;
 
 #[derive(Debug, Clone)]
 pub struct AppState {
-    pub region_map: Arc<RegionMap>,
+    pub region_map: Arc<PopMap>,
 }
 
 impl AppState {
     pub async fn from_settings(settings: &Settings) -> Result<Self> {
-        let region_map = Arc::new(RegionMap::load(&settings.region_dir)?);
+        let population_file = File::open(&settings.pop_map)?;
+        let region_map = Arc::new(PopMap::load(population_file)?);
         Ok(Self { region_map })
     }
 }

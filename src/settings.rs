@@ -24,8 +24,8 @@ pub struct Settings {
     // Configure port
     #[serde(default = "default_port")]
     pub port: u16,
-    // Configure region dir containing H3 indices
-    pub region_dir: PathBuf,
+    // File containing hex/population pairs
+    pub pop_map: PathBuf,
     // Configure cache settings
     pub cache: CacheSettings,
 }
