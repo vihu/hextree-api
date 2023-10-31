@@ -2,7 +2,13 @@ use anyhow::{bail, Result};
 use clap::Parser;
 use hextree_api::{cli::serve, error::AppError, settings::Settings};
 use std::path::PathBuf;
+#[cfg(not(target_env = "msvc"))]
+use tikv_jemallocator::Jemalloc;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+
+#[cfg(not(target_env = "msvc"))]
+#[global_allocator]
+static GLOBAL: Jemalloc = Jemalloc;
 
 #[derive(Debug, clap::Subcommand)]
 pub enum Cmd {
