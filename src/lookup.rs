@@ -65,12 +65,12 @@ impl PopMap {
             Cell::try_from(u64::from(target_cell)).expect("A CellIndex is always a valid Cell");
         match self.popmap.get(target_cell) {
             Some((cell, _)) if target_cell.res() > cell.res() => None,
-            _ => Some(
-                self.popmap
-                    .subtree_iter(target_cell)
-                    .map(|kv| kv.1)
-                    .sum::<f32>(),
-            ),
+            _ => self
+                .popmap
+                .subtree_iter(target_cell)
+                .map(|kv| *kv.1)
+                .filter(|&pop| pop > 0.0)
+                .reduce(|acc, pop| acc + pop),
         }
     }
 }
