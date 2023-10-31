@@ -65,5 +65,5 @@ pub async fn bounds(
         .map(|(cell, pop)| json!({"hex_id": cell.to_string(), "population": pop}))
         .collect();
 
-    Ok((StatusCode::OK, Json(json!(cells))))
+    Ok((StatusCode::OK, Json(Value::Array(cells))))
 }
