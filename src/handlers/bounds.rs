@@ -19,13 +19,13 @@ type Resp = Json<Value>;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RequestQuery {
     /// top left latitude (in degrees)
-    top_left_lat: f64,
+    top: f64,
     /// top left longitude (in degrees)
-    top_left_lon: f64,
+    left: f64,
     /// bottom right latitude (in degrees)
-    bottom_right_lat: f64,
+    bottom: f64,
     /// bottom right longitude (in degrees)
-    bottom_right_lon: f64,
+    right: f64,
     /// resolution (0-15)
     res: u8,
 }
@@ -35,16 +35,16 @@ pub async fn bounds(
     State(state): State<Arc<AppState>>,
 ) -> Result<(StatusCode, Resp), AppError> {
     // top left coordinates
-    let top_left = LatLng::new(query.top_left_lat, query.top_left_lon)?;
+    let top_left = LatLng::new(query.top, query.left)?;
 
     // top right coordinates
-    let top_right = LatLng::new(query.top_left_lat, query.bottom_right_lon)?;
+    let top_right = LatLng::new(query.top, query.right)?;
 
     // bottom right coordinates
-    let bottom_right = LatLng::new(query.bottom_right_lat, query.bottom_right_lon)?;
+    let bottom_right = LatLng::new(query.bottom, query.right)?;
 
     // bottom left coordinates
-    let bottom_left = LatLng::new(query.bottom_right_lat, query.top_left_lon)?;
+    let bottom_left = LatLng::new(query.bottom, query.left)?;
 
     // bounding box (closing the loop)
     let bounding_box = polygon![
