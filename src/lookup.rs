@@ -60,7 +60,7 @@ impl PopMap {
         Ok(Self { popmap })
     }
 
-    pub fn get(&self, target_cell: CellIndex) -> Option<f32> {
+    pub fn get(&self, target_cell: CellIndex) -> Option<u32> {
         let target_cell =
             Cell::try_from(u64::from(target_cell)).expect("A CellIndex is always a valid Cell");
         match self.popmap.get(target_cell) {
@@ -68,9 +68,10 @@ impl PopMap {
             _ => self
                 .popmap
                 .subtree_iter(target_cell)
-                .map(|kv| *kv.1)
-                .filter(|&pop| pop > 0.0)
-                .reduce(|acc, pop| acc + pop),
+                .map(|(_cell, pop)| *pop)
+                .reduce(|acc, pop| acc + pop)
+                .map(|pop| pop.round() as u32)
+                .filter(|pop| *pop > 0),
         }
     }
 }
