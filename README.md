@@ -1,1 +1,3 @@
 # hextree-api
+
+Example <http://127.0.0.1:3001/api/v1/json/bounds?left=-124.41060660766607&bottom=32.5342307609976&right=-114.13445790587905&top=42.00965914828148&res=7>
